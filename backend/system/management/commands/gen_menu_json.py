@@ -3,7 +3,13 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from system.models import Menu, MenuMeta
 import re
+"""
+自动生成 菜单 代码的 Django 管理命令
+使用方法: python manage.py gen_menu_json <app> <model> <parent>
+例如: python manage.py gen_menu_json system Config 系统管理
+"""
 
+# gen_menu_json --app system --model Config --parent 系统管理
 def camel_to_snake(name):
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()

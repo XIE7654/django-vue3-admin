@@ -7,6 +7,7 @@ __all__ = [
     'DictTypeViewSet',
     'PostViewSet',
     'UserViewSet',
+    'ConfigViewSet',
     'LoginLogViewSet',
 ]
 
@@ -18,4 +19,5 @@ from system.views.role import RoleViewSet
 from system.views.dept import DeptViewSet
 from system.views.post import PostViewSet
 from system.views.login_log import LoginLogViewSet
+from system.views.config import ConfigViewSet
 from system.views.user import *

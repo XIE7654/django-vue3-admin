@@ -104,6 +104,10 @@
     "name": "login log",
     "title": "login log"
   },
+   "config": {
+    "name": "System Config",
+    "title": "System Config"
+  },
   "status": "Status",
   "remark": "Remarks",
   "creator": "creator",

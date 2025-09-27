@@ -306,3 +306,26 @@ class LoginLog(CoreModel):
 
     def __str__(self):
         return f"{self.username} - {self.user_ip}"
+
+
+class Config(CoreModel):
+    """
+    参数配置表
+    """
+    name = models.CharField(max_length=100, default='', db_comment='参数名称', verbose_name='参数名称')
+    key = models.CharField(max_length=100, default='', db_comment='参数键名', verbose_name='参数键名')
+    value = models.CharField(max_length=500, default='', db_comment='参数键值', verbose_name='参数键值')
+    config_type = models.BooleanField(
+        default=False,
+        db_comment='系统内置（1是 0否）',
+        verbose_name='系统内置'
+    )
+
+    class Meta:
+        verbose_name = '参数配置'
+        verbose_name_plural = verbose_name
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.name}({self.key})"
+

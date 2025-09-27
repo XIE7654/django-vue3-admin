@@ -105,6 +105,10 @@
     "name": "登录日志",
     "title": "登录日志"
   },
+  "config": {
+    "name": "系统配置",
+    "title": "系统配置"
+  },
   "status": "状态",
   "remark": "备注",
   "creator": "创建人",
