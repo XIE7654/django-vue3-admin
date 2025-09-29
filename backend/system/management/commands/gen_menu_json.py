@@ -6,7 +6,8 @@ import re
 """
 自动生成 菜单 代码的 Django 管理命令
 使用方法: python manage.py gen_menu_json <app> <model> <parent>
-例如: python manage.py gen_menu_json system Config 系统管理
+system 是 app 名称, Config 是 model 名称, System 是上级菜单名称
+例如: python manage.py gen_menu_json --app system --model Config --parent System
 """
 
 # gen_menu_json --app system --model Config --parent 系统管理
