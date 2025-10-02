@@ -1,6 +1,4 @@
 import requests
-from django.db.models import Prefetch, F
-from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -9,9 +7,8 @@ from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import IsAuthenticated
 from django_filters import rest_framework as filters
-from ip2geotools.databases.noncommercial import DbIpCity
-
-from system.models import User, Menu, LoginLog, Dept
+from system.tasks import update_user_login_info
+from system.models import User, Menu, Dept
 from utils.ip_utils import get_client_ip
 
 from utils.serializers import CustomModelSerializer
@@ -62,23 +59,14 @@ class UserLogin(ObtainAuthToken):
         # 获取真实IP地址
         client_ip = get_client_ip(request)
 
-        # 获取IP地址的地理位置信息
-        location_info = self.get_location_from_ip(client_ip)
-        # location_info = ''
-
-        # 更新登录IP和登录时间
-        user.login_ip = client_ip
-        user.last_login = timezone.now()
-        user.save(update_fields=['login_ip', 'last_login'])
-        user_data = UserSerializer(user).data
-        # 记录登录日志
-        LoginLog.objects.create(
-            username=user.username,
-            result=LoginLog.LoginResult.SUCCESS,
-            user_ip=client_ip,
-            location=location_info,
-            user_agent=request.META.get('HTTP_USER_AGENT', '')
+        # 异步处理用户登录信息更新和日志记录
+        update_user_login_info.delay(
+            user.id,
+            client_ip,
+            request.META.get('HTTP_USER_AGENT', '')
         )
+
+        user_data = UserSerializer(user).data
         # 在序列化后的数据中加入 accessToken
         user_data['accessToken'] = token.key
         return Response({
