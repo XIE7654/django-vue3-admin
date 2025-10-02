@@ -20,8 +20,8 @@ def update_user_login_info(user_id, client_ip, user_agent):
     user.save(update_fields=['login_ip', 'last_login'])
 
     # 获取地理位置信息
-    # location_info = get_location_from_ip(client_ip)
-    location_info = None
+    location_info = get_location_from_ip(client_ip)
+    # location_info = None
 
     # 记录登录日录
     LoginLog.objects.create(
@@ -46,9 +46,11 @@ def get_location_from_ip(ip):
                 location_parts = [data["city"], data["regionName"], data["country"]]
                 return ', '.join(location_parts) if location_parts else "未知位置"
             else:
-                return f"IP {ip} 查询失败：{data['message']}"
+                return "位置获取失败"
+                # return f"IP {ip} 查询失败：{data['message']}"
         except Exception as e:
-            return f"IP {ip} 连接错误：{str(e)}"
+            return "位置获取失败"
+            # return f"IP {ip} 连接错误：{str(e)}"
     except Exception as e:
         import logging
         logger = logging.getLogger(__name__)
