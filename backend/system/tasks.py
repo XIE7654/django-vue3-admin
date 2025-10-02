@@ -20,7 +20,8 @@ def update_user_login_info(user_id, client_ip, user_agent):
     user.save(update_fields=['login_ip', 'last_login'])
 
     # 获取地理位置信息
-    location_info = get_location_from_ip(client_ip)
+    # location_info = get_location_from_ip(client_ip)
+    location_info = None
 
     # 记录登录日录
     LoginLog.objects.create(

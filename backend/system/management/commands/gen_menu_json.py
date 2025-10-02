@@ -1,8 +1,9 @@
-import json
 from datetime import datetime
 from django.core.management.base import BaseCommand
 from system.models import Menu, MenuMeta
-import re
+
+from utils.string_utils import camel_to_snake
+
 """
 自动生成 菜单 代码的 Django 管理命令
 使用方法: python manage.py gen_menu_json <app> <model> <parent>
@@ -11,10 +12,6 @@ system 是 app 名称, Config 是 model 名称, System 是上级菜单名称
 """
 
 # gen_menu_json --app system --model Config --parent 系统管理
-def camel_to_snake(name):
-    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
-
 def gen_menu(app_name, model_name, parent_menu_name, creator='admin'):
     print(parent_menu_name, 'parent')
     now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')

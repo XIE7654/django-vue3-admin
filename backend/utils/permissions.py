@@ -1,6 +1,8 @@
 from rest_framework import permissions
 from rest_framework.permissions import BasePermission
 from system.models import Menu
+from utils.string_utils import camel_to_snake
+
 
 class IsSuperUserOrReadOnly(BasePermission):
     """超级用户可读写，普通用户只读"""
@@ -21,7 +23,7 @@ class HasButtonPermission(BasePermission):
         if not required_code:
             # 可自动推断权限编码逻辑
             app_label = view.queryset.model._meta.app_label
-            model_name = view.queryset.model._meta.model_name
+            model_name = camel_to_snake(view.queryset.model._meta.model_name)
             action = getattr(view, 'action', None)
             action_map = {
                 'create': 'create',

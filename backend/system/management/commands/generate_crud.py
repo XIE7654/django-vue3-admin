@@ -8,12 +8,12 @@
 """
 
 import os
-import re
 from string import Template
 from django.core.management.base import BaseCommand, CommandError
 from django.apps import apps
 from django.db import models
-from django.conf import settings
+
+from utils.string_utils import camel_to_snake
 
 TPL_DIR = os.path.join(os.path.dirname(__file__), 'tpl')
 
@@ -23,9 +23,6 @@ def render_tpl(tpl_name, context):
         tpl = Template(f.read())
     return tpl.substitute(context)
 
-def camel_to_snake(name):
-    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 def ensure_view_dirs(app_name, model_name_snake):
     base_dir = f'../web/apps/web-antd/src/views/{app_name.lower()}'
