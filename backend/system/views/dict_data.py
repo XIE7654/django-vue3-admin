@@ -30,7 +30,8 @@ class DictDataLabelValueSerializer(serializers.ModelSerializer):
 
 
 class DictDataViewSet(CustomModelViewSet):
-    queryset = DictData.objects.filter(is_deleted=False)
+    queryset = (DictData.objects.filter(is_deleted=False).select_related('dict_type')
+                .order_by('dict_type__id', 'sort'))
     serializer_class = DictDataSerializer
     filterset_class = DictDataFilter
 

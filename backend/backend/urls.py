@@ -21,6 +21,7 @@ from django.conf import settings
 urlpatterns = [
     path('api/admin/system/', include('system.urls')),
     path('api/admin/ai/', include('ai.urls')),
+    path('api-auth/', include('rest_framework.urls'))
 ]
 
 # 演示环境下禁用 admin 路由

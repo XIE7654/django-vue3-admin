@@ -16,3 +16,4 @@ gunicorn==23.0.0
 django_redis==6.0.0
 django-ninja==1.4.3
 ip2geotools==0.1.6
+pandas==2.2.3

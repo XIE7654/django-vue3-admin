@@ -182,6 +182,23 @@ class UserViewSet(CustomModelViewSet):
     search_fields = ['username', 'nickname', 'mobile']  # 支持模糊搜索
     ordering_fields = ['create_time', 'id']
     ordering = ['-create_time']
+    export_fields = {
+        'id': 'ID',
+        'username': '用户名',
+        'nickname': '昵称',
+        'mobile': '手机号',
+        'email': '邮箱',
+        'status': {
+            'name': '状态',
+            'processor': lambda value, item: '启用' if value == 1 else '禁用'
+        },
+        'login_ip': '登录IP',
+        'last_login': '最后登录时间',
+        'create_time': '创建时间',
+        'update_time': '更新时间',
+    }
+
+    export_filename = '用户数据'
 
 
 class Logout(APIView):

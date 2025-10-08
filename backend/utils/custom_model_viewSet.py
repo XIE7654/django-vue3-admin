@@ -1,8 +1,10 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
+from utils.export_mixin import ExportMixin
 
-class CustomModelViewSet(viewsets.ModelViewSet):
+
+class CustomModelViewSet(viewsets.ModelViewSet, ExportMixin):
     """
     自定义ModelViewSet，提供以下增强功能：
     - 基于动作的序列化器选择
