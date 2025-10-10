@@ -8,11 +8,10 @@ import type {
 import type { SystemRoleApi } from '#/api/system/role';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
-import { Plus } from '@vben/icons';
 
-import { Button, message, Modal } from 'ant-design-vue';
+import { message, Modal } from 'ant-design-vue';
 
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { ACTION_ICON, TableAction, useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteRole, getRoleList, patchRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
@@ -156,14 +155,17 @@ function onCreate() {
     <FormDrawer @success="onRefresh" />
     <Grid :table-title="$t('system.role.list')">
       <template #toolbar-tools>
-        <Button
-          type="primary"
-          @click="onCreate"
-          v-permission="'system:role:create'"
-        >
-          <Plus class="size-5" />
-          {{ $t('ui.actionTitle.create', [$t('system.role.name')]) }}
-        </Button>
+        <TableAction
+          :actions="[
+            {
+              label: $t('ui.actionTitle.create', [$t('system.role.name')]),
+              type: 'primary',
+              icon: ACTION_ICON.ADD,
+              auth: ['system:role:create'],
+              onClick: onCreate,
+            },
+          ]"
+        />
       </template>
     </Grid>
   </Page>

@@ -118,7 +118,7 @@ function onDelete(row: SystemMenuApi.SystemMenu) {
 <template>
   <Page auto-content-height>
     <FormDrawer @success="onRefresh" />
-    <Grid>
+    <Grid table-title="菜单列表">
       <template #toolbar-tools>
         <Button class="mr-2" type="primary" @click="expandAll">
           展开全部

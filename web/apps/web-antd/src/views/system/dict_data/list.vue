@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import type {
-  OnActionClickParams,
-  VxeTableGridOptions,
+import {
+  ACTION_ICON,
+  type OnActionClickParams, TableAction,
+  type VxeTableGridOptions,
 } from '#/adapter/vxe-table';
 import type { SystemDictDataApi } from '#/api/system/dict_data';
 
@@ -137,14 +138,17 @@ function refreshGrid() {
     <FormModal @success="refreshGrid" />
     <Grid table-title="字典数据">
       <template #toolbar-tools>
-        <Button
-          type="primary"
-          @click="onCreate"
-          v-permission="'system:dict_data:create'"
-        >
-          <Plus class="size-5" />
-          {{ $t('ui.actionTitle.create', [$t('system.dict_data.name')]) }}
-        </Button>
+        <TableAction
+          :actions="[
+            {
+              label: $t('ui.actionTitle.create', [$t('system.dict_data.name')]),
+              type: 'primary',
+              icon: ACTION_ICON.ADD,
+              auth: ['system:dict_data:create'],
+              onClick: onCreate,
+            },
+          ]"
+        />
       </template>
     </Grid>
   </Page>

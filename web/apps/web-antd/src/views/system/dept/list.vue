@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import type {
-  OnActionClickParams,
-  VxeTableGridOptions,
+import {
+  ACTION_ICON,
+  type OnActionClickParams, TableAction,
+  type VxeTableGridOptions,
 } from '#/adapter/vxe-table';
 import type { SystemDeptApi } from '#/api/system/dept';
 
@@ -139,20 +140,27 @@ function refreshGrid() {
     <FormModal @success="refreshGrid" />
     <Grid table-title="部门列表">
       <template #toolbar-tools>
-        <Button class="mr-2" type="primary" @click="expandAll">
-          展开全部
-        </Button>
-        <Button class="mr-2" type="primary" @click="collapseAll">
-          折叠全部
-        </Button>
-        <Button
-          type="primary"
-          @click="onCreate"
-          v-permission="'system:dept:create'"
-        >
-          <Plus class="size-5" />
-          {{ $t('ui.actionTitle.create', [$t('system.dept.name')]) }}
-        </Button>
+        <TableAction
+          :actions="[
+            {
+              label: $t('ui.actionTitle.create', [$t('system.dept.name')]),
+              type: 'primary',
+              icon: ACTION_ICON.ADD,
+              auth: ['system:dept:create'],
+              onClick: onCreate,
+            },
+            {
+              label: '展开全部',
+              type: 'primary',
+              onClick: expandAll,
+            },
+            {
+              label: '折叠全部',
+              type: 'primary',
+              onClick: collapseAll,
+            },
+          ]"
+        />
       </template>
     </Grid>
   </Page>

@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import type {
-  OnActionClickParams,
-  VxeTableGridOptions,
+import {
+  ACTION_ICON,
+  type OnActionClickParams, TableAction,
+  type VxeTableGridOptions,
 } from '#/adapter/vxe-table';
 import type { SystemConfigApi } from '#/models/system/config';
 
@@ -127,14 +128,17 @@ function refreshGrid() {
     <FormModal @success="refreshGrid" />
     <Grid table-title="参数配置">
       <template #toolbar-tools>
-        <Button
-          type="primary"
-          @click="onCreate"
-          v-permission="'system:config:create'"
-        >
-          <Plus class="size-5" />
-          {{ $t('ui.actionTitle.create') }}
-        </Button>
+        <TableAction
+          :actions="[
+            {
+              label: $t('ui.actionTitle.create', [$t('system.config.name')]),
+              type: 'primary',
+              icon: ACTION_ICON.ADD,
+              auth: ['system:config:create'],
+              onClick: onCreate,
+            },
+          ]"
+        />
       </template>
     </Grid>
   </Page>

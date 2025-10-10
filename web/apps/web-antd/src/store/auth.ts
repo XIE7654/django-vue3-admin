@@ -49,7 +49,6 @@ export const useAuthStore = defineStore('auth', () => {
         ]);
 
         userInfo = fetchUserInfoResult;
-
         userStore.setUserInfo(userInfo);
         accessStore.setAccessCodes(accessCodes);
 
@@ -107,6 +106,7 @@ export const useAuthStore = defineStore('auth', () => {
     // 设置权限
     if (userInfo && Array.isArray(userInfo.permissions)) {
       permissionStore.setPermissions(userInfo.permissions);
+      accessStore.setAccessCodes(userInfo.permissions);
     }
 
     return userInfo;
