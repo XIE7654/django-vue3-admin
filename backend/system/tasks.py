@@ -1,7 +1,6 @@
 import requests
 
 from celery import shared_task
-from django.utils import timezone
 from system.models import LoginLog, User
 
 
@@ -10,23 +9,14 @@ def add(x, y):
     return x + y
 
 
-
 @shared_task
-def update_user_login_info(user_id, client_ip, user_agent):
-    # 更新用户登录信息
-    user = User.objects.get(id=user_id)
-    user.login_ip = client_ip
-    user.last_login = timezone.now()
-    user.save(update_fields=['login_ip', 'last_login'])
-
+def update_user_login_info(username, client_ip, user_agent, result):
     # 获取地理位置信息
     location_info = get_location_from_ip(client_ip)
-    # location_info = None
-
     # 记录登录日录
     LoginLog.objects.create(
-        username=user.username,
-        result=LoginLog.LoginResult.SUCCESS,
+        username=username,
+        result=result,
         user_ip=client_ip,
         location=location_info,
         user_agent=user_agent

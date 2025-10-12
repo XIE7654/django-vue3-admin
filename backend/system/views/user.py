@@ -1,15 +1,17 @@
 import requests
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 from django_filters import rest_framework as filters
 from system.tasks import update_user_login_info
-from system.models import User, Menu, Dept
+from system.models import User, Menu, Dept, LoginLog
 from utils.ip_utils import get_client_ip
+from utils.models import CommonStatus
 
 from utils.serializers import CustomModelSerializer
 from utils.custom_model_viewSet import CustomModelViewSet
@@ -52,29 +54,59 @@ class UserLogin(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        
-        # 获取真实IP地址
         client_ip = get_client_ip(request)
+        username = request.data.get('username', '')
+        try:
+            serializer.is_valid(raise_exception=True)
+            user = serializer.validated_data['user']
+            if user.status == CommonStatus.DISABLED:
+                update_user_login_info.delay(
+                    username,
+                    client_ip,
+                    request.META.get('HTTP_USER_AGENT', ''),
+                    LoginLog.LoginResult.FAILED
+                )
+                return Response({
+                    "code": 1,
+                    "data": None,
+                    "message": "登录失败, 用户被禁用"
+                })
+            token, created = Token.objects.get_or_create(user=user)
+            user.login_ip = client_ip
+            user.last_login = timezone.now()
+            user.save(update_fields=['login_ip', 'last_login'])
+            # 异步处理用户登录信息更新和日志记录
+            update_user_login_info.delay(
+                username,
+                client_ip,
+                request.META.get('HTTP_USER_AGENT', ''),
+                LoginLog.LoginResult.SUCCESS
+            )
 
-        # 异步处理用户登录信息更新和日志记录
-        update_user_login_info.delay(
-            user.id,
-            client_ip,
-            request.META.get('HTTP_USER_AGENT', '')
-        )
+            user_data = UserSerializer(user).data
+            # 在序列化后的数据中加入 accessToken
+            user_data['accessToken'] = token.key
+            return Response({
+                "code": 0,
+                "data": user_data,
+                "error": None,
+                "message": "ok"
+            })
 
-        user_data = UserSerializer(user).data
-        # 在序列化后的数据中加入 accessToken
-        user_data['accessToken'] = token.key
-        return Response({
-            "code": 0,
-            "data": user_data,
-            "error": None,
-            "message": "ok"
-        })
+        except Exception as e:
+            # 记录登录失败日志
+            update_user_login_info.delay(
+                username,
+                client_ip,
+                request.META.get('HTTP_USER_AGENT', ''),
+                LoginLog.LoginResult.FAILED
+            )
+
+            return Response({
+                "code": 1,
+                "data": None,
+                "message": "登录失败, 用户名或密码错误"
+            })
 
     def get_location_from_ip(self, ip):
         """根据IP地址获取地理位置信息"""
