@@ -69,7 +69,8 @@ class UserLogin(ObtainAuthToken):
                 return Response({
                     "code": 1,
                     "data": None,
-                    "message": "登录失败, 用户被禁用"
+                    "error": "登录失败, 用户被禁用",
+                    "message": ""
                 })
             token, created = Token.objects.get_or_create(user=user)
             user.login_ip = client_ip
@@ -105,7 +106,8 @@ class UserLogin(ObtainAuthToken):
             return Response({
                 "code": 1,
                 "data": None,
-                "message": "登录失败, 用户名或密码错误"
+                "error": "登录失败, 用户名或密码错误",
+                "message": ""
             })
 
     def get_location_from_ip(self, ip):
