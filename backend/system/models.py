@@ -329,3 +329,18 @@ class Config(CoreModel):
     def __str__(self):
         return f"{self.name}({self.key})"
 
+
+class CityArea(CoreModel):
+    """省市区模型"""
+    prov_id = models.IntegerField(verbose_name="省id")
+    prov_name = models.CharField(max_length=255, verbose_name="省")
+    city_id = models.IntegerField(verbose_name="市id")
+    city_name = models.CharField(max_length=255, verbose_name="市")
+    area_id = models.IntegerField(verbose_name="区id")
+    area_name = models.CharField(max_length=255, verbose_name="区")
+
+    class Meta:
+        db_table = "system_city_area"
+        verbose_name = "省市区"
+        verbose_name_plural = verbose_name
+
