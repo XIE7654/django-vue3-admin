@@ -55,8 +55,8 @@ def gen_menu(app_name, model_name, parent_menu_name, creator='admin'):
         {"name": "Edit", "title": "common.edit", "auth_code": f"{app_name}:{model_lower}:edit"},
         {"name": "Delete", "title": "common.delete", "auth_code": f"{app_name}:{model_lower}:delete"},
         {"name": "Query", "title": "common.query", "auth_code": f"{app_name}:{model_lower}:query"},
-        {"name": "Query", "title": "common.query", "auth_code": f"{app_name}:{model_lower}:import"},
-        {"name": "Query", "title": "common.query", "auth_code": f"{app_name}:{model_lower}:export"},
+        {"name": "import", "title": "common.import", "auth_code": f"{app_name}:{model_lower}:import"},
+        {"name": "export", "title": "common.export", "auth_code": f"{app_name}:{model_lower}:export"},
     ]
     for idx, btn in enumerate(buttons):
         btn_meta = MenuMeta.objects.create(

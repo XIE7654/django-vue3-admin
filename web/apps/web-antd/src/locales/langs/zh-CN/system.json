@@ -109,6 +109,10 @@
     "name": "系统配置",
     "title": "系统配置"
   },
+  "city_area": {
+    "name": "地区信息",
+    "title": "地区信息"
+  },
   "status": "状态",
   "remark": "备注",
   "creator": "创建人",

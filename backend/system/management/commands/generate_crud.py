@@ -4,7 +4,7 @@
 """
 自动生成 CRUD 代码的 Django 管理命令
 使用方法: python manage.py generate_crud <app_name> <model_name>
-例如: python manage.py generate_crud system Dept
+例如: python manage.py generate_crud system Dept --frontend
 """
 
 import os

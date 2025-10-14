@@ -14,6 +14,8 @@
   "search": "Search",
   "enabled": "Enabled",
   "disabled": "Disabled",
+  "import": "import",
+  "export": "export",
   "edit": "Edit",
   "delete": "Delete",
   "create": "Create",

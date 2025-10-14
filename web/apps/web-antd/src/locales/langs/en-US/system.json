@@ -100,13 +100,17 @@
     "name": "User",
     "title": "User Management"
   },
-   "login_log": {
+  "login_log": {
     "name": "login log",
     "title": "login log"
   },
-   "config": {
+  "config": {
     "name": "System Config",
     "title": "System Config"
+  },
+  "city_area": {
+    "name": "Area Information",
+    "title": "Area Information"
   },
   "status": "Status",
   "remark": "Remarks",
