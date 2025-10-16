@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
+# from utils.decorators import idempotent
 from utils.export_mixin import ExportMixin
 
 
@@ -102,6 +103,7 @@ class CustomModelViewSet(viewsets.ModelViewSet, ExportMixin):
             status=status.HTTP_200_OK
         )
 
+    # @idempotent(timeout=10) # 幂等性装饰器，防止重复提交
     def create(self, request, *args, **kwargs):
         """重写创建视图，支持批量创建"""
         is_many = isinstance(request.data, list)

@@ -67,11 +67,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'middleware.IdempotencyMiddleware.IdempotencyMiddleware',  # 幂等性中间件 防止重复提交
 ]
 
 # 演示环境中间件 - 全局禁止修改和删除操作
 if DEMO_MODE:
-    MIDDLEWARE.append('utils.middleware.DemoModeMiddleware')
+    MIDDLEWARE.append('middleware.DemoModeMiddleware.DemoModeMiddleware')
 
 AUTH_USER_MODEL = 'system.User'
 ROOT_URLCONF = 'backend.urls'
