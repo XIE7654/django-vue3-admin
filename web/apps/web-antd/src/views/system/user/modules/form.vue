@@ -9,6 +9,7 @@ import { Button } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { $t } from '#/locales';
+import { SystemConfigModel } from '#/models/system/config';
 import { SystemUserModel } from '#/models/system/user';
 
 import { useSchema } from '../data';
@@ -16,6 +17,7 @@ import { useSchema } from '../data';
 const emit = defineEmits(['success']);
 
 const formModel = new SystemUserModel();
+const systemConfigModel = new SystemConfigModel();
 
 const formData = ref<SystemUserApi.SystemUser>();
 const getTitle = computed(() => {
@@ -61,9 +63,27 @@ const [Modal, modalApi] = useVbenModal({
   onOpenChange(isOpen) {
     if (isOpen) {
       const data = modalApi.getData<SystemUserApi.SystemUser>();
-      if (data) {
+      const isEmptyObject =
+        data &&
+        typeof data === 'object' &&
+        !Array.isArray(data) &&
+        Object.keys(data).length === 0;
+
+      if (data && !isEmptyObject) {
         formData.value = data;
         formApi.setValues(formData.value);
+      } else {
+        // 新建时，从系统配置读取默认初始密码
+        systemConfigModel
+          .list({ key: 'sys.user.initPassword' } as any)
+          .then((resp: any) => {
+            const items = resp?.items ?? (Array.isArray(resp) ? resp : []);
+            const initPwd = items?.[0]?.value;
+            if (initPwd) {
+              formApi.setValues({ password: initPwd });
+            }
+          })
+          .catch(() => {});
       }
     }
   },
