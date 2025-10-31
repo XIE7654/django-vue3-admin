@@ -242,5 +242,8 @@ ASGI_APPLICATION = 'backend.asgi.application'
 #     }
 # }
 
+DEEPSEEK_API_KEY = os.getenv('DEEPSEEK_API_KEY', ''),
+DASHSCOPE_API_KEY = os.getenv('DASHSCOPE_API_KEY', ''),
+
 if os.path.exists(os.path.join(BASE_DIR, 'backend/local_settings.py')):
     from backend.local_settings import *

@@ -16,13 +16,10 @@ import {
   Spin,
 } from 'ant-design-vue';
 
-import {
-  createDrawing,
-  getDrawingDetail,
-  getDrawingPage,
-} from '#/api/ai/drawing';
-
+import { DrawingModel } from '#/models/ai/drawing';
+// DrawingModel
 // 定义图片对象类型
+const operator = new DrawingModel();
 interface DrawingImage {
   id: number;
   status: string;
@@ -89,11 +86,7 @@ async function handleDraw() {
   loading.value = true;
   try {
     // 这里调用你的AI画图API，返回图片url数组
-    const data = await createDrawing(form);
-    if (data.code !== 0) {
-      message.error(data.message || '生成失败');
-      return;
-    }
+    await operator.create(form);
     page.value = 1;
     await fetchDrawingList(page.value, pageSize.value); // 刷新第一页图片列表
     // images.value = res.data.images;
@@ -105,20 +98,42 @@ async function handleDraw() {
     loading.value = false;
   }
 }
+let drawingTimer: NodeJS.Timeout | null = null;
 
 // 轮询获取图片详情
 const pollDrawingDetail = async (id: number) => {
-  fetchDrawingDetail(id).then((res) => {
-    if (res && res.data.status === 'RUNNING') {
-      setTimeout(() => pollDrawingDetail(id), 5000);
+  try {
+    const res = await operator.retrieve(id); // 改用 await 简化代码
+    if (res?.status === 'RUNNING') {
+      // 保存定时器 ID，方便后续清除
+      drawingTimer = setTimeout(() => pollDrawingDetail(id), 5000);
+    } else if (
+      res?.status === '"SUCCEEDED"' && // 当状态为 "SUCCEEDED" 时，清除定时器
+      drawingTimer
+    ) {
+      clearTimeout(drawingTimer);
+      drawingTimer = null; // 重置定时器 ID
+      await fetchDrawingList();
+      // 可在此处添加任务成功后的其他逻辑（如刷新页面、提示用户等）
     }
-  });
+    // 可根据需要添加对其他状态的处理（如 FAILED）
+  } catch (error) {
+    // 处理请求失败的情况，避免轮询异常中断
+    console.error('轮询失败:', error);
+    if (drawingTimer) {
+      clearTimeout(drawingTimer);
+      drawingTimer = null;
+    }
+  }
 };
 
 // 获取图片分页列表
 async function fetchDrawingList(pageNum = 1, pageSize = 9) {
   try {
-    const res = await getDrawingPage({ page: pageNum, page_size: pageSize });
+    const res = await operator.list({
+      page: pageNum,
+      pageSize,
+    });
     images.value = res.items;
     // images.value = res.items.map(item => item.pic_url);
     total.value = res.total;
@@ -134,23 +149,6 @@ async function fetchDrawingList(pageNum = 1, pageSize = 9) {
     return null;
   }
 }
-
-// 获取图片详情
-const fetchDrawingDetail = async (id: number) => {
-  try {
-    const res = await getDrawingDetail(id);
-    // 更新 images 中对应项
-    const idx = images.value.findIndex((item) => item.id === id);
-    if (idx !== -1) {
-      images.value[idx] = { ...images.value[idx], ...res.data };
-    }
-    // 处理详情数据
-    return res;
-  } catch {
-    message.error('获取图片详情失败');
-    return null;
-  }
-};
 
 // 页面加载时调用获取图片列表
 onMounted(() => {

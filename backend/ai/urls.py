@@ -10,6 +10,7 @@ router.register(r'tool', views.ToolViewSet)
 router.register(r'knowledge', views.KnowledgeViewSet)
 router.register(r'chat_conversation', views.ChatConversationViewSet)
 router.register(r'chat_message', views.ChatMessageViewSet)
+router.register(r'drawing', views.DrawingViewSet)
 
 
 urlpatterns = [
