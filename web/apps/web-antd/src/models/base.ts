@@ -1,5 +1,9 @@
 import type { Recordable } from '@vben/types';
 
+import type { ExtendedModalApi } from '@vben-core/popup-ui';
+
+import { message } from 'ant-design-vue';
+
 import { requestClient } from '#/api/request';
 
 export interface CoreModel {
@@ -18,6 +22,7 @@ export class BaseModel<
   UpdateData = Partial<CreateData>,
 > {
   protected baseUrl: string;
+  protected formModalApi: ExtendedModalApi | undefined;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
@@ -73,9 +78,6 @@ export class BaseModel<
   /**
    * 导出数据
    */
-  /**
-   * 导出数据
-   */
   async export(params: Recordable<T> = {}) {
     return requestClient.get(`${this.baseUrl}export/`, {
       params,
@@ -90,6 +92,29 @@ export class BaseModel<
     return requestClient.get<Array<T>>(this.baseUrl, { params });
   }
 
+  onDelete<T extends { id: number }>(row: T, refreshGrid: () => void) {
+    const hideLoading = message.loading({
+      content: '删除中...',
+      duration: 0,
+      key: 'action_process_msg',
+    });
+    this.delete(row.id)
+      .then(() => {
+        message.success({
+          content: '删除成功',
+          key: 'action_process_msg',
+        });
+        refreshGrid();
+      })
+      .catch(() => {
+        hideLoading();
+      });
+  }
+
+  onEdit(row: T) {
+    this.formModalApi?.setData(row).open();
+  }
+
   /**
    * 部分更新记录
    */
@@ -102,6 +127,10 @@ export class BaseModel<
    */
   async retrieve(id: number) {
     return requestClient.get<T>(`${this.baseUrl}${id}/`);
+  }
+
+  setFormModalApi(api: ExtendedModalApi) {
+    this.formModalApi = api;
   }
   /**
    * 全量更新记录

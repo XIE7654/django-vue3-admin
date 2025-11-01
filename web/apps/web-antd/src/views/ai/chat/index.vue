@@ -13,14 +13,17 @@ import {
   Row,
   Select,
 } from 'ant-design-vue';
-
 import {
   createConversation,
   fetchAIStream,
   getConversations,
   getMessages,
 } from '#/api/ai/chat';
+import {AiChatConversationModel} from "#/models/ai/chat_conversation";
+import {AiChatMessageModel} from "#/models/ai/chat_message";
 
+const aiChatConversation = new AiChatConversationModel();
+const aiChatMessageModel = new AiChatMessageModel();
 interface Message {
   id: number;
   type: 'assistant' | 'user';
@@ -60,14 +63,21 @@ const filteredChats = computed(() => {
 
 async function selectChat(id: number) {
   selectedChatId.value = id;
-  const { data } = await getMessages(id);
+  const data = await aiChatMessageModel.list({
+    conversation_id: id,
+  });
+  console.log('history', data);
   messages.value = data;
   nextTick(scrollToBottom);
 }
 
 async function handleNewChat() {
   // 调用后端新建对话
-  const { data } = await createConversation(selectedPlatform.value!);
+  // const { data } = await createConversation(selectedPlatform.value!);
+  const data = await aiChatConversation.create({
+    platform: selectedPlatform.value!,
+    title: '新对话',
+  });
   // 刷新对话列表
   await fetchConversations();
   // 选中新建的对话
@@ -127,7 +137,9 @@ function scrollToBottom() {
 
 // 获取历史对话
 async function fetchConversations() {
-  const { data } = await getConversations();
+  // const { data } = await getConversations();
+  const data = await aiChatConversation.list();
+  console.log('history', data);
   chatList.value = data.map((item: any) => ({
     id: item.id,
     title: item.title,
