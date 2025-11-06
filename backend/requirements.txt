@@ -17,3 +17,8 @@ django_redis==6.0.0
 django-ninja==1.4.3
 ip2geotools==0.1.6
 pandas==2.2.3
+langchain-openai==0.3.28
+langchain-deepseek==0.1.3
+langchain==0.3.26
+langchain-community==0.3.26
+dashscope==1.23.8
