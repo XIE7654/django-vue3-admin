@@ -2,7 +2,7 @@ import { useAccessStore } from '@vben/stores';
 
 import { formatToken } from '#/utils/auth';
 
-export const API_BASE = '/api/ai/v1/';
+export const API_BASE = '/api/admin/';
 
 export function fetchWithAuth(input: RequestInfo, init: RequestInit = {}) {
   const accessStore = useAccessStore();

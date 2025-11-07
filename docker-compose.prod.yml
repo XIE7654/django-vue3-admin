@@ -95,24 +95,24 @@ services:
     networks:
       - app_net
 
-  ai_service:
-    restart: always
-    build:
-      context: ./ai_service
-      dockerfile: Dockerfile  # 复用 backend 的 Dockerfile
-      target: prod
-    volumes:
-      - ./ai_service:/app
-    ports:
-      - "38010:8010"
-    depends_on:
-      - db
-      - redis
-    networks:
-      - app_net
-    env_file:
-      - ./docker/.env.prod
-      - ./docker/.env.local
+#  ai_service:
+#    restart: always
+#    build:
+#      context: ./ai_service
+#      dockerfile: Dockerfile  # 复用 backend 的 Dockerfile
+#      target: prod
+#    volumes:
+#      - ./ai_service:/app
+#    ports:
+#      - "38010:8010"
+#    depends_on:
+#      - db
+#      - redis
+#    networks:
+#      - app_net
+#    env_file:
+#      - ./docker/.env.prod
+#      - ./docker/.env.local
 
   frontend:
     restart: always

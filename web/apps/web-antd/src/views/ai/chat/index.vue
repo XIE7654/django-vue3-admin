@@ -13,14 +13,10 @@ import {
   Row,
   Select,
 } from 'ant-design-vue';
-import {
-  createConversation,
-  fetchAIStream,
-  getConversations,
-  getMessages,
-} from '#/api/ai/chat';
-import {AiChatConversationModel} from "#/models/ai/chat_conversation";
-import {AiChatMessageModel} from "#/models/ai/chat_message";
+
+import { AiChatConversationModel } from '#/models/ai/chat_conversation';
+import { AiChatMessageModel } from '#/models/ai/chat_message';
+import {fetchAIStream} from "#/api/ai/chat";
 
 const aiChatConversation = new AiChatConversationModel();
 const aiChatMessageModel = new AiChatMessageModel();

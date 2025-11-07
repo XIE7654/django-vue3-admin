@@ -35,7 +35,7 @@ export async function fetchAIStream({
   platform,
   conversation_id,
 }: FetchAIStreamParams) {
-  const res = await fetchWithAuth('chat/stream', {
+  const res = await fetchWithAuth('ai/chat_message/stream/', {
     method: 'POST',
     body: JSON.stringify({ content, platform, conversation_id }),
   });
