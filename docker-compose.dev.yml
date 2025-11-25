@@ -106,7 +106,7 @@ services:
       - "45678:5678"
     depends_on:
       - backend
-      - ai_service
+#      - ai_service
     networks:
       - dj_admin_network
     env_file:

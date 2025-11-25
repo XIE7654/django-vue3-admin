@@ -122,7 +122,7 @@ services:
       target: prod
     depends_on:
       - backend
-      - ai_service
+#      - ai_service
     ports:
       - "35678:80"
     networks:
