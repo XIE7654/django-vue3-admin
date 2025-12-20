@@ -3,6 +3,8 @@ FROM python:3.12.2 AS base
 
 WORKDIR /app
 
+ENV DEMO_MODE=true
+
 # 安装系统依赖
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
