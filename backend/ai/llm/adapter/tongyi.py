@@ -6,7 +6,7 @@ import requests
 from dashscope import ImageSynthesis
 import os
 
-from llm.base import MultiModalAICapability
+from ..base import MultiModalAICapability
 
 
 class TongYiAdapter(MultiModalAICapability):

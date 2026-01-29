@@ -9,7 +9,7 @@ from ai.llm.enums import LLMProvider
 from ai.llm.factory import get_adapter
 from ai.models import ChatMessage
 from backend import settings
-from models.ai import MessageType
+from ai.choices import MessageType
 from utils.serializers import CustomModelSerializer
 from utils.custom_model_viewSet import CustomModelViewSet
 from django_filters import rest_framework as filters

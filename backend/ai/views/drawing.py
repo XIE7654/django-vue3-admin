@@ -5,8 +5,8 @@ from rest_framework.response import Response
 
 from ai.models import Drawing
 from backend import settings
-from llm.enums import LLMProvider
-from llm.factory import get_adapter
+from ..llm.enums import LLMProvider
+from ..llm.factory import get_adapter
 from utils.serializers import CustomModelSerializer
 from utils.custom_model_viewSet import CustomModelViewSet
 from django_filters import rest_framework as filters

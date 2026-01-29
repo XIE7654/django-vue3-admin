@@ -126,45 +126,6 @@ celery -A backend flower --port=5555 --basic_auth=admin:admin123
 
 ---
 
-
-# ai_service 启动说明
-
-ai_service 是基于 FastAPI 的 AI 服务模块，支持本地开发和生产部署。
-
-## 依赖安装
-
-1. 进入 ai_service 目录：
-   ```bash
-   cd ai_service
-   ```
-2. 安装依赖：
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## 配置说明
-
-- 数据库、API Key、模型等配置请参考 `ai_service/config.py`，`.env`  或相关环境变量。
-- 如需自定义数据库等参数，请根据实际情况修改配置文件。
-
-## 本地开发启动（推荐 uvicorn）
-
-```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8010
-```
-- `--reload`：支持热重载，开发环境建议开启。
-- 默认访问地址：http://localhost:8010/docs 可查看自动生成的 API 文档。
-
-## 生产部署（推荐 gunicorn + uvicorn worker）
-
-```bash
-gunicorn main:app -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8010 --workers 4
-```
-- `--workers`：根据服务器 CPU 核心数调整。
-- 生产环境建议关闭 `--reload`。
-
----
-
 ## 前端启动（以 web-antd 为例）
 
 > 说明：web-ele 目前暂不支持，待 InputPassword 等组件开发完毕后再兼容。

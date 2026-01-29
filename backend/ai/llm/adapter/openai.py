@@ -1,4 +1,4 @@
-from llm.base import MultiModalAICapability
+from ..base import MultiModalAICapability
 from langchain_openai import ChatOpenAI
 # from openai import OpenAI # 如需图片/音频/视频等API
 
