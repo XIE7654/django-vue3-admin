@@ -1,6 +1,6 @@
 # 假设有 google genai sdk
 # from google_genai import GenAI
-from llm.base import MultiModalAICapability
+from ..base import MultiModalAICapability
 
 
 class GoogleGenAIAdapter(MultiModalAICapability):

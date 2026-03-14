@@ -1,6 +1,6 @@
 from langchain_deepseek import ChatDeepSeek
 
-from llm.base import MultiModalAICapability
+from ..base import MultiModalAICapability
 
 
 class DeepSeekAdapter(MultiModalAICapability):
